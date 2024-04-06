@@ -1,0 +1,156 @@
+<!-- Author - Amrinder Singh
+Student Id - C0913235
+Date - 29 March, 2024
+Programm to show different cars and displaying the car info with each turn in car race  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Race</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        background-image: url('./images/car.jpg');
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-top: 20px;
+    }
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .car-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px;
+        width: 250px;
+    }
+    .car-card h2 {
+        margin-top: 0;
+        color: #333;
+    }
+    .car-info {
+        margin-top: 10px;
+        color: #666;
+    }
+    .tn{
+        color: white;
+        font-size: 40px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<h1 style="color: white;">Car Race</h1>
+<div class="tn" id="turnNumber"></div>
+<div class="container" id="carContainer"></div>
+
+<script>
+    // Car class 
+    class Car {
+        constructor(brand, model, year, color, price, gas) {
+            this.brand = brand;
+            this.model = model;
+            this.year = year;
+            this.color = color;
+            this.price = price;
+            this.gas = gas;
+        }
+
+        // honk() method to display details
+        honk() {
+            console.log("Tuut tuut");
+            console.log(`Brand: ${this.brand}`);
+            console.log(`Model: ${this.model}`);
+            console.log(`Year: ${this.year}`);
+            console.log(`Color: ${this.color}`);
+            console.log(`Price: ${this.price}`);
+        }
+
+        // updating the gas of the cars 
+        updateGas(currentYear) {
+            const yearsOld = currentYear - this.year;
+            const gasLoss = 5 + yearsOld;
+            this.gas -= gasLoss;
+            this.gas = Math.max(this.gas, 0); 
+        }
+
+        // function for the information of GAS 
+        getInfoWithGas() {
+            return `${this.brand} ${this.model} - Gas: ${this.gas} liters`;
+        }
+    }
+
+
+    // cars data 
+    const cars = [
+        new Car("Honda", "CR-V", 2023, "Red", 50000, 45),
+        new Car("Ford", "F-150", 2020, "Black", 25000, 30),
+        new Car("BMW", "X5", 2022, "Green", 60000, 65),
+        new Car("Mazda", "CX-5", 2019, "White", 15000, 60),
+        new Car("Audi", "Q7", 2018, "Silver", 52000, 47),
+        new Car("Kia", "Forte", 2020, "Blue", 21000, 56)
+    ];
+
+    // making a car conatiner 
+    const carContainer = document.getElementById('carContainer');
+    // showing turn number 
+    const turnNumberElement = document.getElementById('turnNumber');
+
+
+    // method for displaying the cars 
+    function displayCars() {
+        let carsHTML = '';
+
+        cars.forEach(car => {
+            carsHTML += `
+                <div class="car-card">
+                    <h2>${car.brand} ${car.model}</h2>
+                    <div class="car-info">
+                        <p>Year: ${car.year}</p>
+                        <p>Color: ${car.color}</p>
+                        <p>Price: $${car.price}</p>
+                        <p>Gas: ${car.gas} liters</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        carContainer.innerHTML = carsHTML;
+    }
+
+    
+    function simulateRace(turn) {
+        const currentYear = new Date().getFullYear();
+
+        cars.forEach(car => {
+            car.updateGas(currentYear);
+        });
+
+        displayCars();
+        turnNumberElement.textContent = `Turn ${turn}`;
+    }
+
+    // Initial display of cars
+    displayCars();
+
+    // Simulate race for 7 turns
+    for (let turn = 1; turn <= 7; turn++) {
+        setTimeout(() => {
+            console.log(`Turn ${turn}`);
+            simulateRace(turn);
+        }, turn * 1000); 
+    }
+</script>
+</body>
+</html>
